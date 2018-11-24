@@ -160,3 +160,41 @@ describe('blog posts API resource', function () {
         });
     });
   });
+
+describe('PUT endpoint', function () {
+
+    // strategy from example solution:
+    //  1. Get an existing post from db
+    //  2. Make a PUT request to update that post
+    //  4. Prove post in db is correctly updated
+    it('should update the fields you send over', function () {
+      const updateData = {
+        title: 'cats cats cats',
+        content: 'dogs dogs dogs',
+        author: {
+          firstName: 'foo',
+          lastName: 'bar'
+        }
+      };
+
+      return BlogPost
+        .findOne()
+        .then(post => {
+          updateData.id = post.id;
+
+          return chai.request(app)
+            .put(`/posts/${post.id}`)
+            .send(updateData);
+        })
+        .then(res => {
+          res.should.have.status(204);
+          return BlogPost.findById(updateData.id);
+        })
+        .then(post => {
+          post.title.should.equal(updateData.title);
+          post.content.should.equal(updateData.content);
+          post.author.firstName.should.equal(updateData.author.firstName);
+          post.author.lastName.should.equal(updateData.author.lastName);
+        });
+    });
+  });
