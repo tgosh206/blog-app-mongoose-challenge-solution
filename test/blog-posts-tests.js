@@ -64,3 +64,57 @@ describe('blog posts API resource', function () {
   after(function () {
     return closeServer();
   });
+
+ describe('GET endpoint', function () {
+
+    it('should return all existing posts', function () {
+      // strategy from example solution:
+      //    1. get back all posts returned by by GET request to `/posts`
+      //    2. prove res has right status, data type
+      //    3. prove the number of posts we got back is equal to number
+      //       in db.
+      let res;
+      return chai.request(app)
+        .get('/posts')
+        .then(_res => {
+          res = _res;
+          res.should.have.status(200);
+          res.body.should.have.lengthOf.at.least(1);
+
+          return BlogPost.count();
+        })
+        .then(count => {
+          // number of returned posts should be same
+          // as number of posts in database
+          res.body.should.have.lengthOf(count);
+        });
+    });
+
+    it('should return posts with right fields', function () {
+
+      let resPost;
+      return chai.request(app)
+        .get('/posts')
+        .then(function (res) {
+
+          res.should.have.status(200);
+          res.should.be.json;
+          res.body.should.be.a('array');
+          res.body.should.have.lengthOf.at.least(1);
+
+          res.body.forEach(function (post) {
+            post.should.be.a('object');
+            post.should.include.keys('id', 'title', 'content', 'author', 'created');
+          });
+          // just check that one of the posts' values match with those in
+          // the database & it should be true for rest
+          resPost = res.body[0];
+          return BlogPost.findById(resPost.id);
+        })
+        .then(post => {
+          resPost.title.should.equal(post.title);
+          resPost.content.should.equal(post.content);
+          resPost.author.should.equal(post.authorName);
+        });
+    });
+  });
