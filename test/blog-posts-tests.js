@@ -118,3 +118,45 @@ describe('blog posts API resource', function () {
         });
     });
   });
+
+ describe('POST endpoint', function () {
+    // strategy from example solution: make a POST request with data,
+    // then prove that the post we get back has
+    // right keys, and that `id` is there (which means
+    // the data was inserted into db)
+    it('should make a new blog post', function () {
+
+      const newPost = {
+        title: faker.lorem.sentence(),
+        author: {
+          firstName: faker.name.firstName(),
+          lastName: faker.name.lastName(),
+        },
+        content: faker.lorem.text()
+      };
+
+      return chai.request(app)
+        .post('/posts')
+        .send(newPost)
+        .then(function (res) {
+          res.should.have.status(201);
+          res.should.be.json;
+          res.body.should.be.a('object');
+          res.body.should.include.keys(
+            'id', 'title', 'content', 'author', 'created');
+          res.body.title.should.equal(newPost.title);
+          // Mongo should have created an id on insertion
+          res.body.id.should.not.be.null;
+          res.body.author.should.equal(
+            `${newPost.author.firstName} ${newPost.author.lastName}`);
+          res.body.content.should.equal(newPost.content);
+          return BlogPost.findById(res.body.id);
+        })
+        .then(function (post) {
+          post.title.should.equal(newPost.title);
+          post.content.should.equal(newPost.content);
+          post.author.firstName.should.equal(newPost.author.firstName);
+          post.author.lastName.should.equal(newPost.author.lastName);
+        });
+    });
+  });
