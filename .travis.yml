@@ -2,3 +2,10 @@ language: node_js
 node_js: node
 services:
 - mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: lpoVtZTvZ7YpM3xn8G84tmKh5jQATWgFFf3kuLRf21YbZJLtMVAS/hFiGWhF+Lb05iFbACub04sXAPYZM3KepA9OIn278PVaVB9px6FFFDpknt0oAWiNWrhuT6qjGUfxjOWMx89GuQvwJNbN8TnC1BJtbUs8rqCxY8gxJrwkQ9Y0wpdncodsDgg/NKRtDRHnlXhnWn2w0YR8VLJXGCkzmMbj+ifUJKUl4Hj9lIj55/ip+F7RE+noeUnk6uMGbPmGlmsbd04+bVC1nWCiOUK9hSVYtNt4GZHVBUwZXAQD7r8XMAMMaH0+SfBQS8FNsukISZFus0c+Gglvdm9pywHkg3jXnUMKvha3ngQAGkao77u/bjteN4bTCXfoyiQleX/JJNbXHxPVXsEzm4Sl4+APZROi+kzdufqqZnwxy677KmRlhu05jeALy1mB0doxa3+2AdroxQPcy+h4krp4w+6OaJfLXSpG1Ah6MGlbUJbgDT2mC+cxQ9wYe6n/Xgbw6MtGZPGqmDb7AR9AM18A/hEUBO9xFtnmIVR9+VydTCG8eUog8qcO/lHQGOMrQ3Vpq3ZG+BQvMoK3rpCket1G0mgvqXcV1U45vEM1AoifHtutdg4qwv2Mm2M79pzWUOCiVitF9nYTqgwZMTZEIWugby6E9HL2Ji30i6oCmhe5ylV7mZ4=
+  app: tranquil-castle-86405
+  on:
+    repo: tgosh206/blog-app-mongoose-challenge-solution
